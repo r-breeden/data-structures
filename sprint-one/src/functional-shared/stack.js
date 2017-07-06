@@ -5,4 +5,4 @@ var Stack = function() {
 
 var stackMethods = {};
 
-
+stackMethods
