@@ -22,7 +22,8 @@ describe('graph', function() {
 
   it('should remove nodes that were inserted', function() {
     graph.addNode(2);
-    expect(graph.contains(2)).to.equal(true);
+    graph.addNode(4);
+    expect(graph.contains(4)).to.equal(true);
     graph.removeNode(2);
     expect(graph.contains(2)).to.equal(false);
   });

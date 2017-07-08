@@ -41,7 +41,6 @@ var LinkedList = function() {
       theNode = theNode.next;
     }
     //if the value is not found in the linked list
-    console.log('return false');
     return false;
   };
 
@@ -60,11 +59,6 @@ var Node = function(value) {
 
 var newlinkedList = new LinkedList();
 
-newlinkedList.addToTail(6);
-newlinkedList.addToTail(7);
-newlinkedList.addToTail(8);
-console.log(newlinkedList);
-console.log(newlinkedList.contains(9));
 /*
  * Complexity: What is the time complexity of the above functions?
  */
