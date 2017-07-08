@@ -1,80 +1,95 @@
-
-
 // Instantiate a new graph
 var Graph = function(node) {
-  //object is made for us via keyword 'new'
-  this.value = node;
-  this.edges = [];
-  //object is returned via keyword 'new'
+    this.storage = {};
 };
 
 // Add a node to the graph, passing in the node's value.
 Graph.prototype.addNode = function(node) {
-  //make a new node
-  var freshNode = new Graph(node);
-  //link freshNode to passed in node
-  this.edges.push(freshNode);
-};
-
+ console.log('ADD before', JSON.stringify(this.storage));
+ this.storage[node] = {value: node, edges: []};
+ console.log('ADD after', JSON.stringify(this.storage));
+}
 // Return a boolean value indicating if the value passed to contains is represented in the graph.
 Graph.prototype.contains = function(node) {
-  //check if node is the one we are looking for
-  if ( this.value === node ) { return true; }
-  //check the connections of existing nodes for "target" node
-  for ( var i = 0; i < this.edges.length; i++ ) {
-    if ( this.edges[i].contains(node) === true ) {
-      return true;
-    }
-  }
-  //if not found
-  return false;
-};
-
-Graph.prototype.findNode = function(node) {
-  //check if first node is the droid we are looking for
-  if ( this.value === node ) { return this }
-  for ( var i = 0; i < this.edges.length; i++ ) {
-    if (  this.edges[i].value === node) {
-      return this.edges[i];
-    }
-  }
+    console.log('CONTAINS', JSON.stringify(this.storage));
+ return this.storage.hasOwnProperty(node);
 };
 
 // Removes a node from the graph.
 Graph.prototype.removeNode = function(node) {
-  //find the node correlating to the value
-  node = this.findNode(node);
+ console.log('REMOVE before', JSON.stringify(this.storage));
+ delete this.storage[node];
+ console.log('REMOVE after', JSON.stringify(this.storage));
 };
 
 // Returns a boolean indicating whether two specified nodes are connected.  Pass in the values contained in each of the two nodes.
 Graph.prototype.hasEdge = function(fromNode, toNode) {
-  //find the node that has the value fromNode
-  
-  //remove the edge that references toNode
+ var ifFromNodeEdgesExist = false;
+ var ifToNodeEdgesExist = false;
+     console.log(this.contains(fromNode));
+     console.log(this.contains(toNode));
+    if (this.contains(fromNode) && this.contains(toNode)) {
+      console.log('HAS EDGE before');
+      var fromNodeEdges = this.storage[fromNode].edges;
+      console.log('fromNodeEdges', fromNodeEdges)
+      var toNodeEdges = this.storage[toNode].edges;
+      console.log('toNodeEdges', toNodeEdges)
+        
+      for (var i = 0; i < fromNodeEdges.length; i++) {
+        if (fromNodeEdges[i] === toNode) {
+          ifFromNodeEdgesExist = true;
+        }
+      }    
+      for (var i = 0; i < toNodeEdges.length; i++) {
+        if (toNodeEdges[i] === fromNode) {
+          ifToNodeEdgesExist = true;
+        }
+      }
+    }
+    return (ifFromNodeEdgesExist && ifToNodeEdgesExist);
 };
 
 // Connects two nodes in a graph by adding an edge between them.
 Graph.prototype.addEdge = function(fromNode, toNode) {
-  
+    // debugger;
+ this.storage[fromNode].edges.push(toNode);
+ this.storage[toNode].edges.push(fromNode);
 };
 
 // Remove an edge between any two specified (by value) nodes.
 Graph.prototype.removeEdge = function(fromNode, toNode) {
-  //find the node corresponding to fromNode
-  console.log('this is the fromNode value: ' + fromNode);
-  fromNode = this.findNode(fromNode);
-  toNode = this.findNode(toNode);
-  console.log('this should equal fromnode: ' + fromNode.value);
-  console.log('this should equal toNode: ' + toNode.value);  
-  
+ var fromNodeEdges = this.storage[fromNode].edges;
+   var toNodeEdges = this.storage[toNode].edges;
+ for (var i = 0; i < fromNodeEdges.length; i++) {
+   if (fromNodeEdges[i] === toNode) {
+       fromNodeEdges.splice(i, 1);
+   }
+ }
+ 
+ for (var i = 0; i < toNodeEdges.length; i++) {
+   if (toNodeEdges[i] === toNode) {
+       toNodeEdges.splice(i, 1);
+   }
+ }    
 };
 
 // Pass in a callback which will be executed on each node of the graph.
 Graph.prototype.forEachNode = function(cb) {
+ // for (var key in this.storage) {
+     // console.log('key - ', key);
+     // console.log(typeof key);
+     // cb(this.storage.key.value);
+     // Object.keys(this.storage).forEach(node => {
+     //   cb(node);
+     // });
+    for (var key in this.storage){
+      cb(this.storage[key].value);
+    }
+ // }
 };
 
 /*
- * Complexity: What is the time complexity of the above functions?
- */
+* Complexity: What is the time complexity of the above functions?
+*/
 
 
